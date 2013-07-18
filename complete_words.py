@@ -26,10 +26,11 @@ SCRIPT_LICENSE = "GPL"
 SCRIPT_DESC    = "Complete words from current buffer"
 
 settings = {
-    "word_definition" : r'\b\w+\b',        # Regex used to match words
-    "lines"           : '50',              # Number of lines to look in
-    "key_backward"    : 'ctrl-T',          # Key to complete backwards
-    "key_forward"     : 'ctrl-N',          # Key to complete forwards
+    "word_definition" : r'\w+\b', # Regex used to find rest of word
+    "word_start"      : r'\b\w+', # Regex used to grab partial word
+    "lines"           : '50',     # Number of lines to look in
+    "key_backward"    : 'ctrl-T', # Key to complete backwards
+    "key_forward"     : 'ctrl-N', # Key to complete forwards
 }
 
 prev_completion = { 'done': True }
@@ -46,7 +47,8 @@ def grab_current_word(buffer):
     input_line = w.buffer_get_string(buffer, 'input')
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
     left = input_line[0:input_pos+1]
-    part = re.search(r'\b\w+$', left, re.UNICODE)
+    word_start = w.config_get_plugin("word_start")
+    part = re.search(word_start, left, re.UNICODE)
     if part:
         return part.group(0)
     return part
