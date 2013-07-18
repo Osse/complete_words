@@ -82,11 +82,13 @@ def insert_word(buffer, index):
     input_hook = w.hook_signal("input_text_*", "finish_hook", "")
 
 def find_matches(part):
-    pat = r'(?<=\b' + part + r')\w+'
+    # word_definition = w.config_get_plugin("word_definition")
+    word_definition = r'\w+\b'
+    pat = r'(?<=\b' + part + r')' + word_definition
+    global matches
     for line in last_lines:
         m = re.findall(pat, line)
         m.reverse()
-        global matches
         matches = matches + m
     matches = list(OrderedDict.fromkeys(matches))
 
