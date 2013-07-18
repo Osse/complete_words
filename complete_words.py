@@ -53,23 +53,20 @@ def grab_current_word(buffer):
         return part.group(0)
     return part
 
-def insert_word(buffer, index):
-    rollover = 0
-    if index >= len(matches):
-        rollover = 1
-    index = index % len(matches)
+def insert_word(buffer, index, rollover):
+    # rollover indicates whether we are using match[0] subsequent times
     string = matches[index]
     input_line = w.buffer_get_string(buffer, 'input')
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
 
-    if index == 0 and rollover == 1:
-        prev_len = len(matches[-1])
+    if index == 0 and rollover:
+        strip_len = len(matches[-1])
     elif index > 0:
-        prev_len = len(matches[index-1])
+        strip_len = len(matches[index-1])
     else:
-       prev_len = 0
-    left = input_line[0:input_pos - prev_len]
-    new_pos = input_pos + len(string) - prev_len
+       strip_len = 0
+    left = input_line[0:input_pos - strip_len]
+    new_pos = input_pos + len(string) - strip_len
 
     right = input_line[input_pos:]
     result = left + string + right
@@ -108,10 +105,14 @@ def fill_last_lines(buffer):
 
 # Called when pressing Ctrl-T. Starts or continues completion
 def main_hook(data, buffer, args):
-    if prev_completion['done'] == False:
-        continue_completion(buffer)
+    if args == "backward":
+        backward = True
     else:
-        complete_word(buffer)
+        backward = False
+    if prev_completion == False:
+        continue_completion(buffer, backward)
+    else:
+        complete_word(buffer, backward)
     return w.WEECHAT_RC_OK
 
 # Called when the cursor is moved after attempting completion
@@ -119,7 +120,7 @@ def main_hook(data, buffer, args):
 def finish_hook(signal, type_data, signal_data):
     finish_completion()
 
-def complete_word(buffer):
+def complete_word(buffer, backward):
     # Set flag
     global prev_completion
     prev_completion = False
@@ -132,17 +133,17 @@ def complete_word(buffer):
         finish_completion()
         return
     if len(matches):
-        insert_word(buffer, 0)
+        insert_word(buffer, 0, False)
     else:
         finish_completion()
         w.prnt("", "No matches")
 
-def continue_completion(buffer):
+def continue_completion(buffer, backward):
     global index
     index = index + 1
     # Just insert the next word from matches
     # insert_word() takes care of removing the old one
-    insert_word(buffer, index)
+    insert_word(buffer, index % len(matches), index >= len(matches))
 
 # Cleanup function
 def finish_completion():
