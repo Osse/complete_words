@@ -33,7 +33,7 @@ settings = {
     "key_forward"     : 'ctrl-N', # Key to complete forwards
 }
 
-prev_completion = { 'done': True }
+prev_completion = True
 last_lines = []
 matches = []
 index = 0
@@ -115,7 +115,7 @@ def main_hook(data, buffer, args):
 def complete_word(buffer):
     # Set flag
     global prev_completion
-    prev_completion['done'] = False
+    prev_completion = False
 
     fill_last_lines(buffer)
     part = grab_current_word(buffer)
@@ -141,7 +141,7 @@ def continue_completion(buffer):
 # Taken as a signal that the completion is done
 def finish_completion(signal, type_data, signal_data):
     global prev_completion
-    prev_completion['done'] = True
+    prev_completion = True
     global last_lines
     last_lines = []
     global matches
