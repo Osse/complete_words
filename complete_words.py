@@ -71,11 +71,12 @@ def insert_word(buffer, index):
     right = input_line[input_pos:]
     result = left + string + right
 
+    # If we don't deactivate the hook temporarily it is triggered
     global input_hook
     if input_hook: w.unhook(input_hook)
     w.buffer_set(buffer, 'input', result)
     w.buffer_set(buffer, 'input_pos', str(new_pos))
-    input_hook = w.hook_signal("input_text_*", "complete_completion", "")
+    input_hook = w.hook_signal("input_text_*", "finish_completion", "")
 
 def find_matches(part):
     pat = r'(?<=\b' + part + r')\w+'
@@ -117,12 +118,12 @@ def complete_word(buffer):
     if part:
         find_matches(part)
     else:
-        complete_completion(None, None, None)
+        finish_completion(None, None, None)
         return
     if len(matches):
         insert_word(buffer, 0)
     else:
-        complete_completion(None, None, None)
+        finish_completion(None, None, None)
         w.prnt("", "No matches")
 
 def continue_completion(buffer):
@@ -134,7 +135,7 @@ def continue_completion(buffer):
 
 # Called when the cursor is moved after attempting completion
 # Taken as a signal that the completion is done
-def complete_completion(signal, type_data, signal_data):
+def finish_completion(signal, type_data, signal_data):
     global prev_completion
     prev_completion['done'] = True
     global last_lines
