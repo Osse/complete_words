@@ -17,6 +17,7 @@
 
 import weechat as w
 import re
+from collections import OrderedDict
 
 SCRIPT_NAME    = "complete_words"
 SCRIPT_AUTHOR  = "Øystein Walle <oystwa@gmail.com>"
@@ -85,6 +86,7 @@ def find_matches(part):
         m.reverse()
         global matches
         matches = matches + m
+    matches = list(OrderedDict.fromkeys(matches))
 
 def fill_last_lines(buffer):
     hdata = w.hdata_get("buffer")
