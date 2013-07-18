@@ -79,7 +79,7 @@ def insert_word(buffer, index):
     if input_hook: w.unhook(input_hook)
     w.buffer_set(buffer, 'input', result)
     w.buffer_set(buffer, 'input_pos', str(new_pos))
-    input_hook = w.hook_signal("input_text_*", "finish_completion", "")
+    input_hook = w.hook_signal("input_text_*", "finish_hook", "")
 
 def find_matches(part):
     pat = r'(?<=\b' + part + r')\w+'
@@ -112,6 +112,11 @@ def main_hook(data, buffer, args):
         complete_word(buffer)
     return w.WEECHAT_RC_OK
 
+# Called when the cursor is moved after attempting completion
+# Taken as a signal that the completion is done
+def finish_hook(signal, type_data, signal_data):
+    finish_completion()
+
 def complete_word(buffer):
     # Set flag
     global prev_completion
@@ -122,12 +127,12 @@ def complete_word(buffer):
     if part:
         find_matches(part)
     else:
-        finish_completion(None, None, None)
+        finish_completion()
         return
     if len(matches):
         insert_word(buffer, 0)
     else:
-        finish_completion(None, None, None)
+        finish_completion()
         w.prnt("", "No matches")
 
 def continue_completion(buffer):
@@ -137,9 +142,8 @@ def continue_completion(buffer):
     # insert_word() takes care of removing the old one
     insert_word(buffer, index)
 
-# Called when the cursor is moved after attempting completion
-# Taken as a signal that the completion is done
-def finish_completion(signal, type_data, signal_data):
+# Cleanup function
+def finish_completion():
     global prev_completion
     prev_completion = True
     global last_lines
