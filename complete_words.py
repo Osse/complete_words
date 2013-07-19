@@ -63,11 +63,9 @@ SCRIPT_LICENSE = "GPL"
 SCRIPT_DESC    = "Complete words from current buffer"
 
 settings = {
-    "word_definition" : r'\w+\b', # Regex used to find rest of word
+    "word_definition" : r'\w+',   # Regex used to find rest of word
     "word_start"      : r'\b\w+', # Regex used to grab partial word
     "lines"           : '50',     # Number of lines to look in
-    "key_backward"    : 'ctrl-T', # Key to complete backwards
-    "key_forward"     : 'ctrl-N', # Key to complete forwards
 }
 
 new_completion = True
