@@ -53,18 +53,15 @@ def grab_current_word(buffer):
         return part.group(0)
     return part
 
-def insert_word(buffer, index, rollover):
+def insert_word(buffer, word, prev_word):
     # rollover indicates whether we are using match[0] subsequent times
-    string = matches[index]
+    string = word
     input_line = w.buffer_get_string(buffer, 'input')
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
 
-    if index == 0 and rollover:
-        strip_len = len(matches[-1])
-    elif index > 0:
-        strip_len = len(matches[index-1])
-    else:
-       strip_len = 0
+    index = 1
+    strip_len = len(prev_word)
+
     left = input_line[0:input_pos - strip_len]
     new_pos = input_pos + len(string) - strip_len
 
@@ -133,17 +130,26 @@ def complete_word(buffer, backward):
         finish_completion()
         return
     if len(matches):
-        insert_word(buffer, 0, False)
+        if backward:
+            word = matches[0]
+        else:
+            word = matches[-1]
+        insert_word(buffer, matches[0], '')
     else:
         finish_completion()
         w.prnt("", "No matches")
 
 def continue_completion(buffer, backward):
     global index
-    index = index + 1
-    # Just insert the next word from matches
-    # insert_word() takes care of removing the old one
-    insert_word(buffer, index % len(matches), index >= len(matches))
+    prev_word = matches[index]
+    if backward:
+        index = (index + 1) % len(matches)
+    else:
+        index = index - 1
+        if index < 0:
+            index = len(matches) - 1
+    word = matches[index]
+    insert_word(buffer, word, prev_word)
 
 # Cleanup function
 def finish_completion():
