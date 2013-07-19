@@ -73,7 +73,7 @@ def insert_word(buffer, word, prev_word):
 
 def find_matches(part):
     word_definition = w.config_get_plugin("word_definition")
-    pat = r'(?<=\b' + part + r')' + word_definition
+    pat = r'(?<=\b' + part + ')' + word_definition
     global matches
     for line in last_lines:
         m = re.findall(pat, line)
