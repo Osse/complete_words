@@ -106,9 +106,12 @@ def main_hook(data, buffer, args):
         backward = True
     else:
         backward = False
-    if prev_completion == False:
+    global new_completion
+    if new_completion == False:
         continue_completion(buffer, backward)
     else:
+        # Set flag
+        new_completion = False
         complete_word(buffer, backward)
     return w.WEECHAT_RC_OK
 
@@ -118,10 +121,6 @@ def finish_hook(signal, type_data, signal_data):
     finish_completion()
 
 def complete_word(buffer, backward):
-    # Set flag
-    global prev_completion
-    prev_completion = False
-
     fill_last_lines(buffer)
     part = grab_current_word(buffer)
     if part:
