@@ -48,7 +48,7 @@ def grab_current_word(buffer):
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
     left = input_line[0:input_pos+1]
     word_start = w.config_get_plugin("word_start")
-    part = re.search(word_start, left, re.UNICODE)
+    part = re.search(word_start + '$', left, re.UNICODE)
     if part:
         return part.group(0)
     return part
