@@ -33,11 +33,11 @@ settings = {
     "key_forward"     : 'ctrl-N', # Key to complete forwards
 }
 
-prev_completion = True
+new_completion = True
 last_lines = []
 matches = []
 index = 0
-input_hook = "foo"
+hooks = { 'input': '', 'bufswitch': '' }
 
 def debug_stuff(vars):
     for k, v in vars.items():
@@ -69,11 +69,13 @@ def insert_word(buffer, word, prev_word):
     result = left + string + right
 
     # If we don't deactivate the hook temporarily it is triggered
-    global input_hook
-    if input_hook: w.unhook(input_hook)
+    global hooks
+    if hooks['input']: w.unhook(hooks['input'])
+    if hooks['bufswitch']: w.unhook(hooks['bufswitch'])
     w.buffer_set(buffer, 'input', result)
     w.buffer_set(buffer, 'input_pos', str(new_pos))
-    input_hook = w.hook_signal("input_text_*", "finish_hook", "")
+    hooks['input'] = w.hook_signal("input_text_*", "finish_hook", "")
+    hooks['bufswitch'] = w.hook_signal("buffer_switch", "finish_hook", "")
 
 def find_matches(part):
     # word_definition = w.config_get_plugin("word_definition")
@@ -153,15 +155,19 @@ def continue_completion(buffer, backward):
 
 # Cleanup function
 def finish_completion():
-    global prev_completion
-    prev_completion = True
+    global new_completion
+    new_completion = True
     global last_lines
     last_lines = []
     global matches
     matches = []
     global index
     index = 0
-    w.unhook(input_hook)
+    global hooks
+    w.unhook(hooks['input'])
+    w.unhook(hooks['bufswitch'])
+    hooks['input'] = ''
+    hooks['bufswitch'] = ''
 
 if __name__ == "__main__":
     if w.register(SCRIPT_NAME, SCRIPT_AUTHOR, SCRIPT_VERSION, SCRIPT_LICENSE,
