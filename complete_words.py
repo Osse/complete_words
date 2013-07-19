@@ -73,8 +73,7 @@ def insert_word(buffer, word, prev_word):
     hooks['bufswitch'] = w.hook_signal("buffer_switch", "finish_hook", "")
 
 def find_matches(part):
-    # word_definition = w.config_get_plugin("word_definition")
-    word_definition = r'\w+\b'
+    word_definition = w.config_get_plugin("word_definition")
     pat = r'(?<=\b' + part + r')' + word_definition
     global matches
     for line in last_lines:
