@@ -143,9 +143,7 @@ def continue_completion(buffer, backward):
     if backward:
         index = (index + 1) % len(matches)
     else:
-        index = index - 1
-        if index < 0:
-            index = len(matches) - 1
+        index = (index + len(matches) - 1) % len(matches)
     word = matches[index]
     insert_word(buffer, word, prev_word)
 
