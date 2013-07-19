@@ -132,11 +132,12 @@ def complete_word(buffer, backward):
         finish_completion()
         return
     if len(matches):
+        global index
         if backward:
-            word = matches[0]
+            index = 0
         else:
-            word = matches[-1]
-        insert_word(buffer, matches[0], '')
+            index = len(matches) - 1
+        insert_word(buffer, matches[index], '')
     else:
         finish_completion()
         w.prnt("", "No matches")
