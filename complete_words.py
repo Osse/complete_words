@@ -111,7 +111,7 @@ def find_matches(part):
     pat = r'(?<=\b' + part + ')' + word_definition
     global matches
     for line in last_lines:
-        m = re.findall(pat, line)
+        m = re.findall(pat, line, re.UNICODE)
         m.reverse()
         matches = matches + m
     matches = list(OrderedDict.fromkeys(matches))
