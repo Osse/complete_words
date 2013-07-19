@@ -132,7 +132,7 @@ def fill_last_lines(buffer):
 
 # Called when pressing Ctrl-T. Starts or continues completion
 def main_hook(data, buffer, args):
-    if args == "backward":
+    if args != "reverse":
         backward = True
     else:
         backward = False
