@@ -119,6 +119,7 @@ def main_hook(data, buffer, args):
 # Taken as a signal that the completion is done
 def finish_hook(signal, type_data, signal_data):
     finish_completion()
+    return w.WEECHAT_RC_OK
 
 def complete_word(buffer, backward):
     fill_last_lines(buffer)
