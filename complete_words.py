@@ -119,11 +119,10 @@ def finish_hook(signal, type_data, signal_data):
 def complete_word(buffer, backward):
     fill_last_lines(buffer)
     part = grab_current_word(buffer)
-    if part:
-        find_matches(part)
-    else:
+    if not part:
         finish_completion()
         return
+    find_matches(part)
     if len(matches):
         global index
         if backward:
