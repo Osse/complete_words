@@ -21,7 +21,7 @@ from collections import OrderedDict
 
 SCRIPT_NAME    = "complete_words"
 SCRIPT_AUTHOR  = "Øystein Walle <oystwa@gmail.com>"
-SCRIPT_VERSION = "00000000001"
+SCRIPT_VERSION = "0.1"
 SCRIPT_LICENSE = "GPL"
 SCRIPT_DESC    = "Complete words from current buffer"
 
