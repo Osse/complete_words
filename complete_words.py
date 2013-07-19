@@ -19,15 +19,15 @@
 # Complete words Vim-style
 # ------------------------
 #
-# This script defines a command /complete that tries to complete the current
+# This script defines a command /complete_word that tries to complete the current
 # word by looking at the last lines of the current buffer (50 by default). It
 # is inspired by Vim's keyword completion.
 #
 # This script does not bind any keys by default, but due to its nature it is
 # not useful unless bindings exist. The author suggests:
 #
-# /bind key ctrl-P /complete
-# /bind key ctrl-N /complete reverse
+# /bind key ctrl-P /complete_word
+# /bind key ctrl-N /complete_word reverse
 #
 # If someone (including you) has written e.g. 'internationalization' in the
 # current buffer recently then you can type 'inter<Ctrl-P' and
@@ -130,7 +130,7 @@ def fill_last_lines(buffer):
         line = w.hdata_pointer(w.hdata_get('line'), line, "prev_line")
         i = i + 1
 
-# Called when pressing Ctrl-T. Starts or continues completion
+# Called when invoking /complete_word
 def main_hook(data, buffer, args):
     if args != "reverse":
         backward = True
