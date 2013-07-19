@@ -19,9 +19,9 @@
 # Complete words Vim-style
 # ------------------------
 #
-# This script defines a command /complete_word that tries to complete the current
-# word by looking at the last lines of the current buffer (50 by default). It
-# is inspired by Vim's keyword completion.
+# This script defines a command /complete_word that tries to complete the
+# current word by looking at the last lines of the current buffer (50 by
+# default). It is inspired by Vim's keyword completion.
 #
 # This script does not bind any keys by default, but due to its nature it is
 # not useful unless bindings exist. The author suggests:
@@ -30,10 +30,10 @@
 # /bind key ctrl-N /complete_word reverse
 #
 # If someone (including you) has written e.g. 'internationalization' in the
-# current buffer recently then you can type 'inter<Ctrl-P' and
+# current buffer recently then you can type 'inter<Ctrl-P>' and
 # 'internationalization' will be inserted for you. If someone had written
 # 'internet' in the mean time that will be inserted instead since it appeared
-# more recently. Repeat the Ctrl-P keystroke to cycle matches. If you go too
+# more recently: repeat the Ctrl-P keystroke to cycle matches. If you go too
 # far you can press Ctrl-N to reverse the direction of the cycle.
 #
 # As the matches are inserted directly into the input bar there is no need to
@@ -49,8 +49,9 @@
 # number.
 #
 # By default the script uses the regex \b\w+ to find the partial word in the
-# input bar and then searches for matches to the partial word followed by \w+.
-# This can be customized using the word_definition and word_start variables.
+# input bar and then finds candidates by search ing for the partial word
+# followed by \w+. This can be customized using the word_definition and
+# word_start variables.
 
 import weechat as w
 import re
