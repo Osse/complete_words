@@ -65,8 +65,7 @@ def insert_word(buffer, word, prev_word):
 
     # If we don't deactivate the hook temporarily it is triggered
     global hooks
-    w.unhook(hooks['input'])
-    w.unhook(hooks['bufswitch'])
+    map(w.unhook, hooks.values())
     w.buffer_set(buffer, 'input', result)
     w.buffer_set(buffer, 'input_pos', str(new_pos))
     hooks['input'] = w.hook_signal("input_text_*", "finish_hook", "")
@@ -157,8 +156,7 @@ def finish_completion():
     global index
     index = 0
     global hooks
-    w.unhook(hooks['input'])
-    w.unhook(hooks['bufswitch'])
+    map(w.unhook, hooks.values())
     hooks['input'] = ''
     hooks['bufswitch'] = ''
 
