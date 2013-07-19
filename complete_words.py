@@ -54,19 +54,14 @@ def grab_current_word(buffer):
     return part
 
 def insert_word(buffer, word, prev_word):
-    # rollover indicates whether we are using match[0] subsequent times
-    string = word
     input_line = w.buffer_get_string(buffer, 'input')
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
 
-    index = 1
     strip_len = len(prev_word)
-
     left = input_line[0:input_pos - strip_len]
-    new_pos = input_pos + len(string) - strip_len
-
+    new_pos = input_pos + len(word) - strip_len
     right = input_line[input_pos:]
-    result = left + string + right
+    result = left + word + right
 
     # If we don't deactivate the hook temporarily it is triggered
     global hooks
