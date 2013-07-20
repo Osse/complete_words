@@ -26,8 +26,8 @@
 # This script does not bind any keys by default, but due to its nature it is
 # not useful unless bindings exist. The author suggests:
 #
-# /bind key ctrl-P /complete_word
-# /bind key ctrl-N /complete_word reverse
+# /key bind ctrl-P /complete_word
+# /key bind ctrl-N /complete_word reverse
 #
 # If someone (including you) has written e.g. 'internationalization' in the
 # current buffer recently then you can type 'inter<Ctrl-P>' and
