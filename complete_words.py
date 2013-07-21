@@ -67,6 +67,7 @@ settings = {
     "word_definition" : r'\w+',   # Regex used to find rest of word
     "word_start"      : r'\b\w+', # Regex used to grab partial word
     "lines"           : '50',     # Number of lines to look in
+    "raw_lines"       : '150',    # Number of lines to look in
 }
 
 new_completion = True
@@ -123,14 +124,19 @@ def fill_last_lines(buffer):
     lines = w.hdata_pointer(hdata, buffer, "own_lines")
     line  = w.hdata_pointer(w.hdata_get('lines'), lines, "last_line")
 
-    i = 0
-    search_limit = int(w.config_get_plugin("lines"))
-    while i < search_limit and line != "":
+    found = 0
+    processed = 0
+    lines_limit = int(w.config_get_plugin("lines"))
+    raw_lines_limit = int(w.config_get_plugin("raw_lines"))
+    while found < lines_limit and processed < raw_lines_limit and line != "":
         line_data = w.hdata_pointer(w.hdata_get('line'), line, "data")
-        message = w.hdata_string(w.hdata_get('line_data'), line_data, "message")
-        last_lines.append(message)
+        tag = w.hdata_string(w.hdata_get('line_data'), line_data, "0|tags_array")
+        if tag == 'irc_privmsg':
+            message = w.hdata_string(w.hdata_get('line_data'), line_data, "message")
+            last_lines.append(message)
+            found = found + 1
         line = w.hdata_pointer(w.hdata_get('line'), line, "prev_line")
-        i = i + 1
+        processed = processed + 1
 
 # Called when invoking /complete_word
 def main_hook(data, buffer, args):
