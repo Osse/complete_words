@@ -52,6 +52,11 @@
 # input bar and then finds candidates by search ing for the partial word
 # followed by \w+. This can be customized using the word_definition and
 # word_start variables.
+#
+# For convenience if the input bar is empty and hence completion is meaningless
+# this script can perform another command of choice instead. Set these with the
+# 'empty_cmd' and 'empty_cmd_rev' settings. By default they are set to
+# Ctrl-P and Ctrl-N's defaults respectively.
 
 import weechat as w
 import re
@@ -64,10 +69,12 @@ SCRIPT_LICENSE = "GPL"
 SCRIPT_DESC    = "Complete words from current buffer"
 
 settings = {
-    "word_definition" : r'\w+',   # Regex used to find rest of word
-    "word_start"      : r'\b\w+', # Regex used to grab partial word
-    "lines"           : '50',     # Number of lines to look in
-    "raw_lines"       : '150',    # Number of lines to look in
+    "word_definition" : r'\w+',       # Regex used to find rest of word
+    "word_start"      : r'\b\w+',     # Regex used to grab partial word
+    "lines"           : '50',         # Number of lines to look in
+    "raw_lines"       : '150',        # Number of lines to look in
+    "empty_cmd"       : '/buffer -1', # Command to run if input bar is empty
+    "empty_cmd_rev"   : '/buffer +1', # Command to run if input bar is empty
 }
 
 new_completion = True
@@ -138,12 +145,26 @@ def fill_last_lines(buffer):
         line = w.hdata_pointer(w.hdata_get('line'), line, "prev_line")
         processed = processed + 1
 
+def input_bar_is_empty(buffer):
+    return (w.buffer_get_string(buffer, 'input') == "")
+
+def run_other_command(backward):
+    if backward:
+        w.command("", w.config_get_plugin("empty_cmd"))
+    else:
+        w.command("", w.config_get_plugin("empty_cmd_rev"))
+
 # Called when invoking /complete_word
 def main_hook(data, buffer, args):
     if args != "reverse":
         backward = True
     else:
         backward = False
+
+    if input_bar_is_empty(buffer):
+        run_other_command(backward)
+        return w.WEECHAT_RC_OK
+
     global new_completion
     if new_completion == False:
         continue_completion(buffer, backward)
