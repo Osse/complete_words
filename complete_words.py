@@ -92,10 +92,10 @@ def grab_current_word(buffer):
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
     left = input_line[0:input_pos+1]
     word_start = w.config_get_plugin("word_start")
-    part = re.search(word_start + '$', left, re.UNICODE)
-    if part:
-        return part.group(0)
-    return part
+    partial = re.search(word_start + '$', left, re.UNICODE)
+    if partial:
+        return partial.group(0)
+    return partial
 
 def insert_word(buffer, word, prev_word):
     input_line = w.buffer_get_string(buffer, 'input')
@@ -116,9 +116,9 @@ def insert_word(buffer, word, prev_word):
              w.hook_signal("buffer_switch", "finish_hook", ""),
              w.hook_signal("window_switch", "finish_hook", ""))
 
-def find_matches(part):
+def find_matches(partial):
     word_definition = w.config_get_plugin("word_definition")
-    pat = r'(?<=\b' + part + ')' + word_definition
+    pat = r'(?<=\b' + partial + ')' + word_definition
     global matches
     for line in last_lines:
         m = re.findall(pat, line, re.UNICODE)
@@ -182,11 +182,11 @@ def finish_hook(signal, type_data, signal_data):
 
 def complete_word(buffer, backward):
     fill_last_lines(buffer)
-    part = grab_current_word(buffer)
-    if not part:
+    partial = grab_current_word(buffer)
+    if not partial:
         finish_completion()
         return
-    find_matches(part)
+    find_matches(partial)
     if len(matches):
         global index
         if backward:
