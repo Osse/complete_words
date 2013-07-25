@@ -16,16 +16,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-help_text = """
-Complete words Vim-style
-------------------------
+help_desc = "Complete words Vim-style"
+help_args = "[reverse]"
 
-This script defines a command /complete_word that tries to complete the
-current word by looking at the last lines of the current buffer (50 by
-default). It is inspired by Vim's keyword completion.
+help_args_desc="""reverse: Reverse the direction of the completion cycle
 
-This script does not bind any keys by default, but due to its nature it is
-not useful unless bindings exist. The author suggests:
+Description:
+
+This script tries to complete the current word by looking at the last lines of
+the current buffer (50 by default). It is inspired by Vim's keyword completion.
+This script does not bind any keys by default, but it's not useful unless
+bindings exist. Suggestion:
 
 /key bind ctrl-P /complete_word
 /key bind ctrl-N /complete_word reverse
@@ -34,8 +35,8 @@ If someone (including you) has written e.g. 'internationalization' in the
 current buffer recently then you can type 'inter<Ctrl-P>' and
 'internationalization' will be inserted for you. If someone had written
 'internet' in the mean time that will be inserted instead since it appeared
-more recently: repeat the Ctrl-P keystroke to cycle matches. If you go too
-far you can press Ctrl-N to reverse the direction of the cycle.
+more recently: repeat the Ctrl-P keystroke to cycle matches. If you go too far
+you can press Ctrl-N to reverse the direction of the cycle.
 
 As the matches are inserted directly into the input bar there is no need to
 press a key to "accept" the current completion. Just continue typing; the
@@ -44,21 +45,23 @@ script will then regard its job as done.
 If the script appears to be slow you can reduce the number of lines to search
 for matches in:
 
-/set plugins.var.python.complete_words.lines 25
+/set plugins.var.python.complete_words.lines_limit 25
 
 Conversely, if it rarely completes the word you want you can increase the
 number.
 
-By default the script uses the regex \b\w+ to find the partial word in the
-input bar and then finds candidates by search ing for the partial word
-followed by \w+. This can be customized using the word_definition and
-word_start variables.
+It only considers lines that are messages written by humans. Set
+"raw_lines_limit" to set an absolute limit (default 150).
 
-For convenience if the input bar is empty and hence completion is meaningless
-this script can perform another command of choice instead. Set these with the
-'empty_cmd' and 'empty_cmd_rev' settings. By default they are set to
-Ctrl-P and Ctrl-N's defaults respectively.
-"""
+By default the script uses the regex  \b\w+  to find the partial word in the
+input bar and then finds candidates by searching for the partial word followed
+by  \w+  . This can be customized using the "word_definition" and "word_start"
+variables.
+
+For convenience if the input bar is empty, and hence completion is meaningless,
+this script performs another command instead. Set these with the "empty_cmd"
+and "empty_cmd_rev" settings. By default they are set to Ctrl-P and Ctrl-N's
+defaults respectively."""
 
 import weechat as w
 import re
@@ -231,5 +234,5 @@ if __name__ == "__main__":
         for option, default_value in list(settings.items()):
             if not w.config_is_set_plugin(option):
                 w.config_set_plugin(option, default_value)
-        w.hook_command("complete_word", help_text, "", "", "", "main_hook", "")
+        w.hook_command("complete_word", help_desc, help_args, help_args_desc, "", "main_hook", "")
         # Now we wait
