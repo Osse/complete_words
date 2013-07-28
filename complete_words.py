@@ -94,7 +94,7 @@ def grab_current_word(buffer):
     partial = re.search(word_start + '$', left, re.UNICODE)
     if partial:
         return partial.group(0)
-    return partial
+    return None
 
 def insert_word(buffer, word, prev_word):
     input_line = w.buffer_get_string(buffer, 'input')
