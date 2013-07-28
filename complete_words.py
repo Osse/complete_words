@@ -82,10 +82,6 @@ matches = []
 index = 0
 hooks = ('', '')
 
-def debug_stuff(vars):
-    for k, v in vars.items():
-        w.prnt("", k + ': ' + str(v))
-
 def grab_current_word(buffer):
     input_line = w.buffer_get_string(buffer, 'input')
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
@@ -194,7 +190,6 @@ def complete_word(buffer, backward):
         insert_word(buffer, matches[index], '')
     else:
         finish_completion()
-        w.prnt("", "No matches")
 
 def continue_completion(buffer, backward):
     global index
