@@ -86,7 +86,7 @@ new_completion = True
 last_lines = []
 matches = []
 index = 0
-hooks = ('', '', '')
+hooks = ('', '')
 
 def debug_stuff(vars):
     for k, v in vars.items():
@@ -118,8 +118,7 @@ def insert_word(buffer, word, prev_word):
     w.buffer_set(buffer, 'input', result)
     w.buffer_set(buffer, 'input_pos', str(new_pos))
     hooks = (w.hook_signal("input_text_*", "finish_hook", ""),
-             w.hook_signal("buffer_switch", "finish_hook", ""),
-             w.hook_signal("window_switch", "finish_hook", ""))
+             w.hook_signal("*_switch", "finish_hook", ""))
 
 def find_matches(partial):
     word_definition = w.config_get_plugin("word_definition")
@@ -225,7 +224,7 @@ def finish_completion():
     index = 0
     global hooks
     map(w.unhook, hooks)
-    hooks = ('', '', '')
+    hooks = ('', '')
 
 if __name__ == "__main__":
     if w.register(SCRIPT_NAME, SCRIPT_AUTHOR, SCRIPT_VERSION, SCRIPT_LICENSE,
