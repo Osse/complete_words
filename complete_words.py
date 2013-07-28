@@ -39,7 +39,7 @@ As the matches are inserted directly into the input bar there is no need to
 press a key to "accept" the current completion. Just continue typing; the
 script will then regard its job as done.
 
-The defualt number of lines to search in is 50. If the script appears to be
+The default number of lines to search in is 50. If the script appears to be
 slow you can reduce the number of lines to search for matches by changing the
 "lines_limit". Conversely, if it rarely completes the word you want you can
 increase the number.
@@ -54,7 +54,7 @@ variables.
 
 For convenience if the input bar is empty, and hence completion is meaningless,
 this script performs another command instead. Set these with the "empty_cmd"
-and "empty_cmd_rev" settings. By default they are set to ntrl-P and ntrl-N's
+and "empty_cmd_rev" settings. By default they are set to ctrl-P and ctrl-N's
 defaults respectively."""
 
 import weechat as w
