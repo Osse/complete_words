@@ -36,7 +36,8 @@ current buffer recently then you can type 'inter<Ctrl-P>' and
 'internationalization' will be inserted for you. If someone had written
 'internet' in the mean time that will be inserted instead since it appeared
 more recently: repeat the Ctrl-P keystroke to cycle matches. If you go too far
-you can press Ctrl-N to reverse the direction of the cycle.
+you can press Ctrl-N to reverse the direction of the cycle. If there are no
+matches nothing happens.
 
 As the matches are inserted directly into the input bar there is no need to
 press a key to "accept" the current completion. Just continue typing; the
