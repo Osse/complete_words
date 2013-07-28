@@ -40,12 +40,9 @@ press a key to "accept" the current completion. Just continue typing; the
 script will then regard its job as done.
 
 The defualt number of lines to search in is 50. If the script appears to be
-slow you can reduce the number of lines to search for matches in:
-
-/set plugins.var.python.complete_words.lines_limit 25
-
-Conversely, if it rarely completes the word you want you can increase the
-number.
+slow you can reduce the number of lines to search for matches by changing the
+"lines_limit". Conversely, if it rarely completes the word you want you can
+increase the number.
 
 It only considers lines that are messages written by humans (or bots). Set
 "raw_lines_limit" to set an absolute limit (default 150).
