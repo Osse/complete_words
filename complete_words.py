@@ -142,9 +142,9 @@ def fill_last_lines(buffer):
         if tag == 'irc_privmsg':
             message = w.hdata_string(w.hdata_get('line_data'), line_data, "message")
             last_lines.append(message)
-            found = found + 1
+            found += 1
         line = w.hdata_pointer(w.hdata_get('line'), line, "prev_line")
-        processed = processed + 1
+        processed += 1
 
 def input_bar_is_empty(buffer):
     return (w.buffer_get_string(buffer, 'input') == "")
