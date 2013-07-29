@@ -123,12 +123,13 @@ def find_matches(partial):
 def fill_last_lines(buffer):
     hdata = w.hdata_get("buffer")
     lines = w.hdata_pointer(hdata, buffer, "own_lines")
-    line  = w.hdata_pointer(w.hdata_get('lines'), lines, "last_line")
 
     found = 0
     processed = 0
     lines_limit = int(w.config_get_plugin("lines"))
     raw_lines_limit = int(w.config_get_plugin("raw_lines"))
+    line  = w.hdata_pointer(w.hdata_get('lines'), lines, "last_line")
+
     while found < lines_limit and processed < raw_lines_limit and line != "":
         line_data = w.hdata_pointer(w.hdata_get('line'), line, "data")
         tag = w.hdata_string(w.hdata_get('line_data'), line_data, "0|tags_array")
