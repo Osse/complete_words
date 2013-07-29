@@ -25,7 +25,7 @@ Description:
 This script tries to complete the current word by looking at the last lines of
 the current buffer. It is inspired by Vim's keyword completion. It does not
 bind any keys by default, but it's not useful unless bindings exist. To make it
-similar to Vim I suggest bind ctrl-P to "/complete word" and ctrl-N to
+similar to Vim I suggest bind ctrl-P to "/complete_word" and ctrl-N to
 "/complete_word reverse"
 
 If someone (including you) has written 'internationalization' in the current
