@@ -80,6 +80,7 @@ new_completion = True
 last_lines = []
 matches = []
 index = 0
+partial = ''
 hooks = ('', '')
 
 def grab_current_word(buffer):
@@ -87,9 +88,11 @@ def grab_current_word(buffer):
     input_pos = w.buffer_get_integer(buffer, 'input_pos')
     left = input_line[0:input_pos+1]
     word_start = w.config_get_plugin("word_start")
-    partial = re.search(word_start + '$', left, re.UNICODE)
-    if partial:
-        return partial.group(0)
+    part = re.search(word_start + '$', left, re.UNICODE)
+    if part:
+        global partial
+        partial = part.group(0)
+        return part.group(0)
     return None
 
 def insert_word(buffer, word, prev_word):
@@ -189,6 +192,7 @@ def complete_word(buffer, backward):
         else:
             index = len(matches) - 1
         insert_word(buffer, matches[index], '')
+        w.bar_item_update("complete_status")
     else:
         finish_completion()
 
@@ -201,6 +205,7 @@ def continue_completion(buffer, backward):
         index = (index + len(matches) - 1) % len(matches)
     word = matches[index]
     insert_word(buffer, word, prev_word)
+    w.bar_item_update("complete_status")
 
 # Cleanup function
 def finish_completion():
@@ -215,11 +220,20 @@ def finish_completion():
     global hooks
     map(w.unhook, hooks)
     hooks = ('', '')
+    global partial
+    partial = ''
+    w.bar_item_update("complete_status")
+
+def bar_update(data, item, window):
+    if index == 0 and len(matches) == 0:
+        return ""
+    return 'Completing \"' + partial + '": ' + str(index + 1) + '/' + str(len(matches))
 
 if __name__ == "__main__":
     if w.register(SCRIPT_NAME, SCRIPT_AUTHOR, SCRIPT_VERSION, SCRIPT_LICENSE,
                   SCRIPT_DESC, "", ""):
         # Set default settings
+        my_bar = w.bar_item_new("complete_status", "bar_update", "")
         for option, default_value in list(settings.items()):
             if not w.config_is_set_plugin(option):
                 w.config_set_plugin(option, default_value)
