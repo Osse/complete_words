@@ -84,9 +84,7 @@ partial = ''
 hooks = ('', '')
 
 def grab_current_word(buffer):
-    input_line = w.buffer_get_string(buffer, 'input')
-    input_pos = w.buffer_get_integer(buffer, 'input_pos')
-    left = input_line[0:input_pos+1]
+    left = get_input_line(buffer, -1)
     word_start = w.config_get_plugin("word_start")
     part = re.search(word_start + '$', left, re.UNICODE)
     if part:
@@ -123,7 +121,18 @@ def find_matches(partial):
         matches = matches + m
     matches = list(OrderedDict.fromkeys(matches))
 
+def get_input_line(buffer, right):
+    input_line = w.buffer_get_string(buffer, 'input')
+    input_pos = w.buffer_get_integer(buffer, 'input_pos')
+    if right == 1:
+        return input_line[input_pos:]
+    elif right == -1: #Left
+        return input_line[:input_pos]
+    else:
+        return input_line
+
 def fill_last_lines(buffer):
+    last_lines.append(get_input_line(buffer, -1))
     hdata = w.hdata_get("buffer")
     lines = w.hdata_pointer(hdata, buffer, "own_lines")
 
@@ -143,8 +152,10 @@ def fill_last_lines(buffer):
         line = w.hdata_pointer(w.hdata_get('line'), line, "prev_line")
         processed += 1
 
+    last_lines.append(get_input_line(buffer, 1))
+
 def input_bar_is_empty(buffer):
-    return (w.buffer_get_string(buffer, 'input') == "")
+    return (get_input_line(buffer, 0) == "")
 
 def run_other_command(backward):
     if backward:
