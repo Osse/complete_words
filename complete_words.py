@@ -181,12 +181,14 @@ def main_hook(data, buffer, args):
         # Set flag
         new_completion = False
         complete_word(buffer, backward)
+    w.bar_item_update("complete_status")
     return w.WEECHAT_RC_OK
 
 # Called when the cursor is moved after attempting completion
 # Taken as a signal that the completion is done
 def finish_hook(signal, type_data, signal_data):
     finish_completion()
+    w.bar_item_update("complete_status")
     return w.WEECHAT_RC_OK
 
 def complete_word(buffer, backward):
@@ -203,7 +205,6 @@ def complete_word(buffer, backward):
         else:
             index = len(matches) - 1
         insert_word(buffer, matches[index], '')
-        w.bar_item_update("complete_status")
     else:
         finish_completion()
 
@@ -216,7 +217,6 @@ def continue_completion(buffer, backward):
         index = (index + len(matches) - 1) % len(matches)
     word = matches[index]
     insert_word(buffer, word, prev_word)
-    w.bar_item_update("complete_status")
 
 # Cleanup function
 def finish_completion():
@@ -233,7 +233,6 @@ def finish_completion():
     hooks = ('', '')
     global partial
     partial = ''
-    w.bar_item_update("complete_status")
 
 def bar_update(data, item, window):
     if index == 0 and len(matches) == 0:
