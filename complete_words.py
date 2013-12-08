@@ -234,7 +234,7 @@ def finish_completion():
     global partial
     partial = ''
 
-def bar_update(data, item, window):
+def update_bar_item(data, item, window):
     if index == 0 and len(matches) == 0:
         return ""
     return 'Completing \"' + partial + '": ' + str(index + 1) + '/' + str(len(matches))
@@ -243,7 +243,7 @@ if __name__ == "__main__":
     if w.register(SCRIPT_NAME, SCRIPT_AUTHOR, SCRIPT_VERSION, SCRIPT_LICENSE,
                   SCRIPT_DESC, "", ""):
         # Set default settings
-        my_bar = w.bar_item_new("complete_status", "bar_update", "")
+        my_bar = w.bar_item_new("complete_status", "update_bar_item", "")
         for option, default_value in list(settings.items()):
             if not w.config_is_set_plugin(option):
                 w.config_set_plugin(option, default_value)
