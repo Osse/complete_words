@@ -90,7 +90,7 @@ def grab_current_word(buffer):
     if part:
         global partial
         partial = part.group(0)
-        return part.group(0)
+        return partial
     return None
 
 def insert_word(buffer, word, prev_word):
