@@ -144,6 +144,11 @@ def fill_last_lines(buffer):
 
     while found < lines_limit and processed < raw_lines_limit and line != "":
         line_data = w.hdata_pointer(w.hdata_get('line'), line, "data")
+
+        count = w.hdata_integer(w.hdata_get("line_data"), line_data, "tags_count")
+        if count == 0:
+            continue
+
         tag = w.hdata_string(w.hdata_get('line_data'), line_data, "0|tags_array")
         if tag == 'irc_privmsg':
             message = w.hdata_string(w.hdata_get('line_data'), line_data, "message")
