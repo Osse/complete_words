@@ -147,6 +147,7 @@ def fill_last_lines(buffer):
 
         count = w.hdata_integer(w.hdata_get("line_data"), line_data, "tags_count")
         if count == 0:
+            processed += 1
             continue
 
         tag = w.hdata_string(w.hdata_get('line_data'), line_data, "0|tags_array")
